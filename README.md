@@ -1,4 +1,4 @@
-# MMP Course Development Project
+# MMD Course Development Project
 
 *Students*
 
