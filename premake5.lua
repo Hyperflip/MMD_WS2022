@@ -30,11 +30,21 @@ project "HelloWorld"
 	}
 
 	filter { "platforms:x64" }
+		defines "PLATFORM_WINDOWS"
 		system "Windows"
 		architecture "x86_64"
+		links {
+			"Xinput.lib",
+			"Xinput9_1_0.lib"
+		}
 
 	filter { "platforms:Orbis" }
+		defines "PLATFORM_ORBIS"
 		system "Orbis"
+		links {
+			"ScePad_stub_weak",
+			"SceUserService_stub_weak"
+		}
 	
 	filter "configurations:Debug"
 		defines { "DEBUG" }
