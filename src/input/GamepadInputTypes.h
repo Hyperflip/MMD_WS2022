@@ -24,4 +24,11 @@ namespace Input
 		BUTTON_PRESSED,
 		BUTTON_RELEASED,
 	};
-} // namespace Input
+
+	enum class ButtonState {
+		HOLD,
+		PRESSED,
+		RELEASED,
+		IDLE,
+	};
+}

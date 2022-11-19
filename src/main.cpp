@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "input/InputSystemAPI.h"
+#include "input/InputSystem.h"
 #include "core/Clock.h"
 
 namespace GameConstants
@@ -33,13 +33,17 @@ int main()
 		input.Update();
 
 		// @note - lukas.vogl - We want to exit the game when the right button on the gamepad face is pressed ( B on XBox controllers, Circle on Dualshocks )
-		if ( input.QueryGamepadButtonState( Input::GamepadButtons::FACE_BUTTON_RIGHT, Input::InputAction::BUTTON_PRESSED ) )
+		if ( input.QueryGameButtonState( Input::GamepadButtons::FACE_BUTTON_DOWN, Input::InputAction::BUTTON_PRESSED ) )
 		{
 			shouldExitGame = true;
 		}
 
+		if (!input.IsGamepadConnected()) {
+			shouldExitGame = true;
+		}
+
 		// // @note - lukas.vogl - We want to test the vibration feature with the down button (as long as it's hold, we vibrate)
-		if ( input.QueryGamepadButtonState( Input::GamepadButtons::FACE_BUTTON_RIGHT, Input::InputAction::BUTTON_HOLD ) )
+		if ( input.QueryGameButtonState( Input::GamepadButtons::FACE_BUTTON_RIGHT, Input::InputAction::BUTTON_HOLD ) )
 		{
 			input.ApplyVibrationEffect( 20000 );
 		}
