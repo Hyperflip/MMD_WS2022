@@ -36,6 +36,8 @@ project "HelloWorld"
 			"Xinput.lib",
 			"Xinput9_1_0.lib"
 		}
+		buildoptions { "-Wno-address-of-temporary" }
+		toolset ("clang")
 
 	filter { "platforms:Orbis" }
 		defines "PLATFORM_ORBIS"
