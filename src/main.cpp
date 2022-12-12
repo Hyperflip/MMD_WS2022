@@ -79,6 +79,7 @@ int main()
 		}
 
 		if (!input.IsGamepadConnected()) {
+			std::cout << "MMD: No controller found." << std::endl;
 			shouldExitGame = true;
 		}
 

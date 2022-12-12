@@ -44,7 +44,8 @@ project "HelloWorld"
 		system "Orbis"
 		links {
 			"ScePad_stub_weak",
-			"SceUserService_stub_weak"
+			"SceUserService_stub_weak",
+			"SceSaveData_stub_weak"
 		}
 	
 	filter "configurations:Debug"
