@@ -42,30 +42,30 @@ namespace SaveData
 			ret = sceUserServiceInitialize(NULL);
 			if (ret < SCE_OK) {
 				if (ret == SCE_USER_SERVICE_ERROR_ALREADY_INITIALIZED) {
-					std::cout << "MMD: User service already initialized" << std::endl;
+					std::cout << "User service already initialized" << std::endl;
 				}
 				else {
-					std::cout << "MMD: Failed to initialize user service" << std::endl;
+					std::cout << "Failed to initialize user service" << std::endl;
 					return;
 				}
 			}
 			else {
-				std::cout << "MMD: Successfully initialize user service" << std::endl;
+				std::cout << "Successfully initialize user service" << std::endl;
 			}
 
 			ret = sceSaveDataInitialize3(NULL);
 			if (ret < SCE_OK) {
-				std::cout << "MMD: Failed to initialize save data system" << std::endl;
+				std::cout << "Failed to initialize save data system" << std::endl;
 				return;
 			}
-			std::cout << "MMD: Initialize save data system" << std::endl;
+			std::cout << "Initialize save data system" << std::endl;
 
 			ret = sceUserServiceGetInitialUser(&m_UserId);
 			if (ret < SCE_OK) {
-				std::cout << "MMD: Failed to obtain user id" << std::endl;
+				std::cout << "Failed to obtain user id" << std::endl;
 				return;
 			}
-			std::cout << "MMD: Obtained user id" << std::endl;
+			std::cout << "Obtained user id" << std::endl;
 
 			memset(&m_DirName, 0x00, sizeof(m_DirName));
 			strlcpy(m_DirName.data, "SAVEDATA00", sizeof(m_DirName.data));
@@ -77,9 +77,6 @@ namespace SaveData
 		bool Initialize() {
 			int ret = SCE_OK;
 
-			// Delete existing save data
-			//clean(m_UserId, "SAVEDATA%02u", 10);
-
 			SceSaveDataMount2 mount2;
 			setupSceSaveDataMount2(m_UserId,
 				SCE_SAVE_DATA_MOUNT_MODE_CREATE | SCE_SAVE_DATA_MOUNT_MODE_RDWR,
@@ -90,24 +87,24 @@ namespace SaveData
 			ret = sceSaveDataMount2(&mount2, &mountResult);
 			if (ret < SCE_OK) {
 				if (ret == SCE_SAVE_DATA_ERROR_BUSY || ret == SCE_SAVE_DATA_ERROR_EXISTS) {
-					std::cout << "MMD: Save data already exists" << std::endl;
+					std::cout << "Save data already exists" << std::endl;
 					return true;
 				}
 				else {
-					std::cout << "MMD: Failed to mount save data" << std::endl;
+					std::cout << "Failed to mount save data" << std::endl;
 					return false;
 				}
 			}
-			std::cout << "MMD: Successfully mounted save data" << std::endl;
+			std::cout << "Successfully mounted save data" << std::endl;
 
 			SceSaveDataMountPoint* mountPoint = &mountResult.mountPoint;
 
 			ret = sceSaveDataUmount(mountPoint);
 			if (ret < SCE_OK) {
-				std::cout << "MMD: Failed to unmount save data" << std::endl;
+				std::cout << "Failed to unmount save data" << std::endl;
 				return false;
 			}
-			std::cout << "MMD: Successfully unmounted save data" << std::endl;
+			std::cout << "Successfully unmounted save data" << std::endl;
 
 			return true;
 		}
@@ -120,7 +117,7 @@ namespace SaveData
 
 			ret = sceSaveDataTerminate();
 			if (ret < SCE_OK) {
-				std::cout << "MMD: Failed to terminate save data" << std::endl;
+				std::cout << "Failed to terminate save data" << std::endl;
 			}
 		};
 
@@ -149,7 +146,7 @@ namespace SaveData
 			ret = sceSaveDataMount2(&mount2, &mountResult);
 			if (ret < SCE_OK)
 			{
-				std::cout << "MMD: Failed to mount save data" << std::endl;
+				std::cout << "Failed to mount save data" << std::endl;
 				hasSaved = false;
 				return hasSaved;
 			}
@@ -165,7 +162,7 @@ namespace SaveData
 			output.close();
 
 			if (!output.good()) {
-				std::cout << "MMD: There was a problem while saving" << std::endl;
+				std::cout << "There was a problem while saving" << std::endl;
 				hasSaved = false;
 			}
 
@@ -204,12 +201,12 @@ namespace SaveData
 			ret = sceSaveDataMount2(&mount2, &mountResult);
 			if (ret < SCE_OK)
 			{
-				std::cout << "MMD: Failed to mount save data" << std::endl;
+				std::cout << "Failed to mount save data" << std::endl;
 
 				// Attempt to restore backup
 				if (ret == SCE_SAVE_DATA_ERROR_BROKEN) {
-					std::cout << "MMD: Save data is corrupted" << std::endl;
-					std::cout << "MMD: Attempting to load backup" << std::endl;
+					std::cout << "Save data is corrupted" << std::endl;
+					std::cout << "Attempting to load backup" << std::endl;
 
 					SceSaveDataCheckBackupData check;
 					memset(&check, 0x00, sizeof(SceSaveDataCheckBackupData));
@@ -218,7 +215,7 @@ namespace SaveData
 					ret = sceSaveDataCheckBackupData(&check);
 
 					if (ret < SCE_OK) {
-						std::cout << "MMD: No backup exists" << std::endl;
+						std::cout << "No backup exists" << std::endl;
 						return file;
 					}
 					else {
@@ -227,7 +224,7 @@ namespace SaveData
 						restore.userId = m_UserId;
 						restore.dirName = &m_DirName;
 						ret = sceSaveDataRestoreBackupData(&restore);
-						std::cout << "MMD: Restoring backup" << std::endl;
+						std::cout << "Restoring backup" << std::endl;
 						goto Start;
 					}
 				}
@@ -245,7 +242,7 @@ namespace SaveData
 			std::ifstream input(path, std::ios::binary);
 
 			if (!input) {
-				std::cout << "MMD: Could not open save file" << std::endl;
+				std::cout << "Could not open save file" << std::endl;
 				goto End;
 			}
 
@@ -253,7 +250,7 @@ namespace SaveData
 			input.close();
 
 			if (!input.good()) {
-				std::cout << "MMD: Error occured at reading time" << std::endl;
+				std::cout << "Error occured at reading time" << std::endl;
 				goto End;
 			}
 

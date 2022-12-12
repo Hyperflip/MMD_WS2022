@@ -78,12 +78,15 @@ int main()
 			shouldExitGame = true;
 		}
 
+		/*
 		if (!input.IsGamepadConnected()) {
-			std::cout << "MMD: No controller found." << std::endl;
+			std::cout << "No controller found." << std::endl;
 			shouldExitGame = true;
-		}
+		}*/
 
-		if (input.QueryGameButtonState(Input::GamepadButtons::FACE_BUTTON_DOWN, Input::InputAction::BUTTON_PRESSED))
+		saveGame.score = 8u;
+
+		if (true || input.QueryGameButtonState(Input::GamepadButtons::FACE_BUTTON_DOWN, Input::InputAction::BUTTON_PRESSED))
 		{
 			SaveData::SaveFile saveFile;
 			saveFile.data = reinterpret_cast<byte*>(&saveGame);
@@ -91,20 +94,20 @@ int main()
 
 			if (saveSystem.Save(saveFile, "save.dat")) {
 				SaveData::SaveGame save = *reinterpret_cast<SaveData::SaveGame*>(saveFile.data);
-				std::cout << "MMD: Saving current score: " << save.score << std::endl;
+				std::cout << "Saving current score: " << save.score << std::endl;
 			}
 		}
 
-		if (input.QueryGameButtonState(Input::GamepadButtons::FACE_BUTTON_TOP, Input::InputAction::BUTTON_PRESSED))
+		if (true || input.QueryGameButtonState(Input::GamepadButtons::FACE_BUTTON_TOP, Input::InputAction::BUTTON_PRESSED))
 		{
 			SaveData::SaveFile* saveFile = saveSystem.Load("save.dat");
 
 			if (saveFile->IsValid()) {
 				saveGame = *reinterpret_cast<SaveData::SaveGame*>(saveFile->data);
-				std::cout << "MMD: Loading last saved score: " << saveGame.score << std::endl;
+				std::cout << "Loading last saved score: " << saveGame.score << std::endl;
 			}
 			else {
-				std::cout << "MMD: Could not load save file. Make sure a save file exists. " << std::endl;
+				std::cout << "Could not load save file. Make sure a save file exists. " << std::endl;
 			}
 
 			delete saveFile;
@@ -122,14 +125,14 @@ int main()
 
 		if (input.QueryGameButtonState(Input::GamepadButtons::SHOULDER_RIGHT, Input::InputAction::BUTTON_PRESSED)) {
 			saveGame.score++;
-			std::cout << "MMD: Increasing score: " << saveGame.score << std::endl;
+			std::cout << "Increasing score: " << saveGame.score << std::endl;
 		}
 
 		if (input.QueryGameButtonState(Input::GamepadButtons::SHOULDER_LEFT, Input::InputAction::BUTTON_PRESSED)) {
 			if (saveGame.score > 0) {
 				saveGame.score--;
 			}
-			std::cout << "MMD: Decreasing score: " << saveGame.score << std::endl;
+			std::cout << "Decreasing score: " << saveGame.score << std::endl;
 		}
 
 		// @task - lukas.vogl - Add another function here that let's you (and later me) test that your input system reacts to presses, releases and hold actions for the supported buttons

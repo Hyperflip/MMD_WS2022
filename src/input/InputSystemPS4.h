@@ -47,19 +47,19 @@ public:
 
 		int ret = sceUserServiceGetInitialUser(&m_UserId);
 		if (ret < 0) {
-			std::cout << "MMD: Failed to obtain user id" << std::endl;
+			std::cout << "Failed to obtain user id" << std::endl;
 			return;
 		}
 		else {
-			std::cout << "MMD: Successfully obtained user id" << std::endl;
+			std::cout << "Successfully obtained user id" << std::endl;
 		}
 
 		m_PortHandle = scePadOpen(m_UserId, SCE_PAD_PORT_TYPE_STANDARD, 0, NULL);
 		if (m_PortHandle < 0) {
-			std::cout << "MMD: Setting failed" << std::endl;
+			std::cout << "Setting failed" << std::endl;
 		}
 		else {
-			std::cout << "MMD: Setting suceeded" << std::endl;
+			std::cout << "Setting suceeded" << std::endl;
 		}
 	}
 	/*

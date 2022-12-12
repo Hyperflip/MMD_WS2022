@@ -12,6 +12,7 @@ namespace SaveData {
 	// @note - lukas.vogl - The data our "game" wants to store and read (will be altered, saved and loaded by using controller input)
 	struct SaveGame
 	{
+		// WHY 32 bit if data length is 1 byte?
 		uint32_t score = 0u;
 	};
 
@@ -51,14 +52,19 @@ namespace SaveData {
 			const char* tempSaveDataName = "temp.dat";
 			const char* backupSaveDataName = "backup.dat";
 
+			// STEP 1: create generic output buffer to check if data could be written
+
 			std::ofstream output(tempSaveDataName, std::ios::binary);
 			output.write((char*)save.data, save.length);
 			output.close();
 
 			if (!output.good()) {
-				std::cout << "MMD: There was a problem while saving" << std::endl;
+				std::cout << "There was a problem while saving" << std::endl;
 				return false;
 			}
+
+			// STEP 2: create temp input filestream from output and final bare output stream for savefile
+			// & write temp (prev. output) into file
 
 			std::ifstream temp(tempSaveDataName, std::ios::binary);
 			std::ofstream file(name, std::ios::binary);
@@ -68,11 +74,13 @@ namespace SaveData {
 			temp.close();
 			file.close();
 
+			// STEP 3: remove a previous backup and rename temp to be new backup
+
 			remove(backupSaveDataName);
 			int status = rename(tempSaveDataName, backupSaveDataName);
 
 			if (status == 0) {
-				std::cout << "MMD: Successfully created backup" << std::endl;
+				std::cout << "Successfully created backup" << std::endl;
 			}
 
 			return true;
@@ -86,14 +94,14 @@ namespace SaveData {
 			std::ifstream input(name, std::ios::binary);
 
 			if (!input) {
-				std::cout << "MMD: Could not open save file" << std::endl;
-				std::cout << "MMD: Attempting to load backup" << std::endl;
+				std::cout << "Could not open save file" << std::endl;
+				std::cout << "Attempting to load backup" << std::endl;
 
 				const char* backupSaveDataName = "backup.dat";
 				std::ifstream backup(backupSaveDataName, std::ios::binary);
 
 				if (backup.good()) {
-					std::cout << "MMD: Restoring backup" << std::endl;
+					std::cout << "Restoring backup" << std::endl;
 					std::ofstream file(name, std::ios::binary);
 					file << backup.rdbuf();
 
@@ -103,20 +111,18 @@ namespace SaveData {
 					goto Start;
 				}
 				else {
-					std::cout << "MMD: No backup exists" << std::endl;
+					std::cout << "No backup exists" << std::endl;
 					backup.close();
 
 					return saveFile;
 				}
 			}
 
-			// TODO: figure out
-			// reading data the size of savegame (32 bit) from savefile?
 			input.read((char*)&saveGame, sizeof(SaveGame));
 			input.close();
 
 			if (!input.good()) {
-				std::cout << "MMD: Error occured at reading time" << std::endl;
+				std::cout << "Error occured at reading time" << std::endl;
 				return saveFile;
 			}
 
